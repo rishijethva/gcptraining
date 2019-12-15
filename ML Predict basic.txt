@@ -1,0 +1,67 @@
+
+
+
+input_label_cols=['weight_pounds']) AS
+
+
+1st Create Model
+CREATE OR REPLACE MODEL
+  `stockml.stocktrain_model`
+OPTIONS
+  (model_type='linear_reg',
+    input_label_cols=['Label']) AS
+  
+
+SELECT 
+date,
+Open As Open_Price,
+High AS High_Price,
+Low As Low_Price, 
+Shares_Traded As Totalshares, Turnover__Rs__Cr_ As TotalAmt,
+
+Close As Label
+FROM `rishi232702.stockml.stocktrain` LIMIT 2000
+
+2nd Evaluate 
+
+SELECT
+  *
+FROM
+  ML.EVALUATE(MODEL `stockml.stocktrain_model`,
+
+(
+SELECT 
+# date,
+Open As Open_Price,
+High AS High_Price,
+Low As Low_Price, 
+Shares_Traded As Totalshares, Turnover__Rs__Cr_ As TotalAmt,
+
+Close As Label
+FROM `rishi232702.stockml.stocktrain` LIMIT 2000
+
+))
+
+
+3rd Predict
+
+SELECT
+  predicted_Label
+FROM
+  ML.PREDICT(MODEL `stocktrain_model`,
+
+
+(
+SELECT 
+# date,
+Open As Open_Price,
+High AS High_Price,
+Low As Low_Price, 
+Shares_Traded As Totalshares, Turnover__Rs__Cr_ As TotalAmt,
+
+Close As Label
+FROM `rishi232702.stockml.stocktrain` LIMIT 2000
+
+))
+
+
